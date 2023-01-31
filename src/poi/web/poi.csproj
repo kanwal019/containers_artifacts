@@ -27,9 +27,9 @@
     <Compile Remove="Controllers\ValuesController.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Remove="appsettings.Development.json" />
+    <None Include="appsettings.Development.json" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="appsettings.Development.json" />
+    <None Include="appsettings.json" CopyToPublishDirectory="Always" />
   </ItemGroup>
 </Project>

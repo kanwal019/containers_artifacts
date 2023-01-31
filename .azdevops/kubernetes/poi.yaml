@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: poi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: poi
+  template:
+    metadata:
+      labels:
+        app: poi
+    spec:
+      nodeSelector:
+        "kubernetes.io/os": linux
+      containers:
+        - name: poi
+          image: registrywnq0978.azurecr.io/poi:1.0
+          env:
+            - name: SQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: sqlconfig
+                  key: SQL_USER
+                  optional: false
+            - name: SQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: sqlconfig
+                  key: SQL_PASSWORD
+                  optional: false
+            - name: SQL_SERVER
+              valueFrom:
+                secretKeyRef:
+                  name: sqlconfig
+                  key: SQL_SERVER
+                  optional: false
+            - name: SQL_DBNAME
+              valueFrom:
+                secretKeyRef:
+                  name: sqlconfig
+                  key: SQL_DBNAME
+                  optional: false
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: poi-service
+spec:
+  ports:
+    - port: 6379
+  selector:
+    app: poi
