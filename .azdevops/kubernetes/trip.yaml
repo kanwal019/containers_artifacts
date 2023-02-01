@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: trip
+  name: trips
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: trip
+      app: trips
   template:
     metadata:
       labels:
-        app: trip
+        app: trips
     spec:
       nodeSelector:
         "kubernetes.io/os": linux
       containers:
-        - name: trip
-          image: registrywnq0978.azurecr.io/trip:1.0
+        - name: trips
+          image: registrywnq0978.azurecr.io/trips:1.0
           env:
             - name: SQL_USER
               valueFrom:
@@ -42,13 +42,16 @@ spec:
                   name: sqlconfig
                   key: SQL_DBNAME
                   optional: false
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Production
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: trip-service
+  name: trips-service
 spec:
   ports:
     - port: 6379
+      targetPort: 80
   selector:
-    app: trip
+    app: trips

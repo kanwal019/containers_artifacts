@@ -42,6 +42,12 @@ spec:
                   name: sqlconfig
                   key: SQL_DBNAME
                   optional: false
+            - name: USERPROFILE_API_ENDPOINT
+              value: http://userprofile-service:6379
+            - name: TRIPS_API_ENDPOINT
+              value: http://trips-service:6379
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Production
 ---
 apiVersion: v1
 kind: Service
@@ -50,5 +56,6 @@ metadata:
 spec:
   ports:
     - port: 6379
+      targetPort: 80
   selector:
     app: tripviewer

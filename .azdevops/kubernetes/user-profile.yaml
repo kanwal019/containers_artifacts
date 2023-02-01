@@ -50,5 +50,6 @@ metadata:
 spec:
   ports:
     - port: 6379
+      targetPort: 80
   selector:
     app: userprofile
