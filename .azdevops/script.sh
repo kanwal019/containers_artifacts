@@ -1,0 +1,14 @@
+az aks create -g rg_cluster_ne -n openhackTeam4Cluster \
+--enable-aad \
+--aad-admin-group-object-ids 62d375de-92c9-4f07-8ccd-6e2c99fe60c2 \
+--network-plugin azure \ 
+--vnet-subnet-id /subscriptions/620c30a1-87d2-42fc-9eea-1e18cdf2d71d/resourceGroups/teamResources/providers/Microsoft.Network/virtualNetworks/vnet/subnets/cluster-subnet \
+--docker-bridge-address 172.17.0.1/16 \ 
+--dns-service-ip 10.2.0.10 \ 
+--service-cidr 10.2.0.0/24 \ 
+--generate-ssh-keys \
+--node-count 3 \
+--region North Europe \
+--enable-addons monitoring \ 
+--enable-msi-auth-for-monitoring \
+--attach-acr registrywnq0978
