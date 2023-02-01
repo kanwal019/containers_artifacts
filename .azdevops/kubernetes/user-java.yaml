@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: trip
+  name: user-java
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: trip
+      app: user-java
   template:
     metadata:
       labels:
-        app: trip
+        app: user-java
     spec:
       nodeSelector:
         "kubernetes.io/os": linux
       containers:
-        - name: trip
-          image: registrywnq0978.azurecr.io/trip:1.0
+        - name: user-java
+          image: registrywnq0978.azurecr.io/user-java:1.0
           env:
             - name: SQL_USER
               valueFrom:
@@ -46,9 +46,9 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: trip-service
+  name: user-java-service
 spec:
   ports:
     - port: 6379
   selector:
-    app: trip
+    app: user-java

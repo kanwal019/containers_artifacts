@@ -1,22 +1,48 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: poi
+  labels:
+    run: poi
+spec:
+  type: NodePort
+  ports:
+    - port: 8080
+      targetPort: 80
+      protocol: TCP
+      name: http
+    - port: 443
+      protocol: TCP
+      name: https
+  selector:
+    run: poi
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: trip
+  name: poi
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: trip
+      app: poi
   template:
     metadata:
       labels:
-        app: trip
+        app: poi
     spec:
       nodeSelector:
         "kubernetes.io/os": linux
+      volumes:
+        - name: secret-volume
+          secret:
+            secretName: nginxsecret
+        - name: configmap-volume
+          configMap:
+            name: nginxconfigmap
       containers:
-        - name: trip
-          image: registrywnq0978.azurecr.io/trip:1.0
+        - name: poi
+          image: registrywnq0978.azurecr.io/poi:1.0
           env:
             - name: SQL_USER
               valueFrom:
@@ -42,13 +68,11 @@ spec:
                   name: sqlconfig
                   key: SQL_DBNAME
                   optional: false
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: trip-service
-spec:
-  ports:
-    - port: 6379
-  selector:
-    app: trip
+          ports:
+            - containerPort: 443
+            - containerPort: 80
+          volumeMounts:
+            - mountPath: /etc/nginx/ssl
+              name: secret-volume
+            - mountPath: /etc/nginx/conf.d
+              name: configmap-volume

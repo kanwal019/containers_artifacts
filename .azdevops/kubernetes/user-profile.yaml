@@ -1,22 +1,22 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: trip
+  name: userprofile
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: trip
+      app: userprofile
   template:
     metadata:
       labels:
-        app: trip
+        app: userprofile
     spec:
       nodeSelector:
         "kubernetes.io/os": linux
       containers:
-        - name: trip
-          image: registrywnq0978.azurecr.io/trip:1.0
+        - name: userprofile
+          image: registrywnq0978.azurecr.io/userprofile:1.0
           env:
             - name: SQL_USER
               valueFrom:
@@ -46,9 +46,9 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: trip-service
+  name: userprofile-service
 spec:
   ports:
     - port: 6379
   selector:
-    app: trip
+    app: userprofile
