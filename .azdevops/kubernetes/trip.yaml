@@ -19,16 +19,16 @@ spec:
         - name: trips
           image: registrywnq0978.azurecr.io/trips:1.0
           volumeMounts:
-          - name: secret-provider
-            mountPath: "/secrets"
-            readOnly: true
+            - name: secret-provider
+              mountPath: "/secrets"
+              readOnly: true
       volumes:
-      - name: secret-provider
-        csi:
-          driver: secrets-store.csi.k8s.io
-          readOnly: true
-          volumeAttributes:
-            secretProviderClass: "secret-provider"
+        - name: secret-provider
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "secret-provider"
 ---
 apiVersion: v1
 kind: Service
