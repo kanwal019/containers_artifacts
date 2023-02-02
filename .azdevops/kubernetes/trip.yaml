@@ -18,33 +18,17 @@ spec:
       containers:
         - name: trips
           image: registrywnq0978.azurecr.io/trips:1.0
-          env:
-            - name: SQL_USER
-              valueFrom:
-                secretKeyRef:
-                  name: sqlconfig
-                  key: SQL_USER
-                  optional: false
-            - name: SQL_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: sqlconfig
-                  key: SQL_PASSWORD
-                  optional: false
-            - name: SQL_SERVER
-              valueFrom:
-                secretKeyRef:
-                  name: sqlconfig
-                  key: SQL_SERVER
-                  optional: false
-            - name: SQL_DBNAME
-              valueFrom:
-                secretKeyRef:
-                  name: sqlconfig
-                  key: SQL_DBNAME
-                  optional: false
-            - name: ASPNETCORE_ENVIRONMENT
-              value: Production
+          volumeMounts:
+          - name: secret-provider
+            mountPath: "/secrets"
+            readOnly: true
+      volumes:
+      - name: secret-provider
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "secret-provider"
 ---
 apiVersion: v1
 kind: Service
