@@ -18,31 +18,17 @@ spec:
       containers:
         - name: userprofile
           image: registrywnq0978.azurecr.io/userprofile:1.0
-          env:
-            - name: SQL_USER
-              valueFrom:
-                secretKeyRef:
-                  name: sqlconfig
-                  key: SQL_USER
-                  optional: false
-            - name: SQL_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: sqlconfig
-                  key: SQL_PASSWORD
-                  optional: false
-            - name: SQL_SERVER
-              valueFrom:
-                secretKeyRef:
-                  name: sqlconfig
-                  key: SQL_SERVER
-                  optional: false
-            - name: SQL_DBNAME
-              valueFrom:
-                secretKeyRef:
-                  name: sqlconfig
-                  key: SQL_DBNAME
-                  optional: false
+          volumeMounts:
+            - name: secret-provider
+              mountPath: "/secrets"
+              readOnly: true
+      volumes:
+        - name: secret-provider
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "secret-provider"
 ---
 apiVersion: v1
 kind: Service
